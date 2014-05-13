@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
   # s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "ruby_reddit_api", "~> 0.2"
+  s.add_dependency "open_uri_redirections"
 end
