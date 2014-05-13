@@ -15,6 +15,8 @@ Gem::Specification.new do |s|
   # TODO Write me some specs please
   # s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "ruby_reddit_api", "~> 0.2"
-  s.add_dependency "open_uri_redirections"
+  s.add_dependency "ruby_reddit_api",       "~> 0.2"
+  s.add_dependency "open_uri_redirections", "~> 0.1"
+
+  s.required_ruby_version = '>= 1.9.3'
 end
