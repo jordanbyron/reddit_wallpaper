@@ -15,7 +15,7 @@ class RedditWallpaper
   def download_new_image
     posts = reddit.browse(subreddit)
     posts.each do |post|
-      if post.url.include?('imgur') && !downloaded.include?(post.url)
+      if download? post.url
         not_downloaded << post.url
       end
     end
@@ -25,14 +25,22 @@ class RedditWallpaper
 
   private
 
+  # Checks that the post url is either a jpg file or hosted on imgur
+  #
+  def download?(url)
+    url[/(imgur|\.jpe?g\z)/] && !downloaded.include?(url)
+  end
+
   def reddit
     @reddit ||= Reddit::Api.new
   end
 
   def download_image(url)
-    # Append .jpg to ensure we are getting the image file
+    # Append .jpg to ensure we are getting the image file from imgur
+    url += ".jpg" unless url[/\.jpe?g\z/]
+
     open(path, 'wb') do |file|
-      file << open(url + ".jpg", allow_redirections: :all).read
+      file << open(url, allow_redirections: :all).read
     end
     downloaded << url
   end

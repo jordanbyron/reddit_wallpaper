@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    reddit_wallpaper (0.0.2)
+    reddit_wallpaper (0.0.3)
       open_uri_redirections (~> 0.1)
       ruby_reddit_api (~> 0.2)
 
