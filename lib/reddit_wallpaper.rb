@@ -3,6 +3,10 @@ require 'ruby_reddit_api'
 require 'open_uri_redirections'
 
 class RedditWallpaper
+  def self.reddit
+    @reddit ||= Reddit::Api.new
+  end
+
   def initialize(subreddit, destination_file)
     @subreddit      = subreddit
     @path           = destination_file
@@ -13,10 +17,10 @@ class RedditWallpaper
   attr_reader :path, :subreddit, :downloaded, :not_downloaded
 
   def download_new_image
-    posts = reddit.browse(subreddit)
-    posts.each do |post|
-      if download? post.url
-        not_downloaded << post.url
+    posts = RedditWallpaper.reddit.browse(subreddit)
+    posts.map(&:url).each do |url|
+      if download? url
+        not_downloaded << url
       end
     end
 
@@ -31,11 +35,8 @@ class RedditWallpaper
     url[/(imgur|\.jpe?g\z)/] && !downloaded.include?(url)
   end
 
-  def reddit
-    @reddit ||= Reddit::Api.new
-  end
-
   def download_image(url)
+    return unless url
     # Append .jpg to ensure we are getting the image file from imgur
     url += ".jpg" unless url[/\.jpe?g\z/]
 

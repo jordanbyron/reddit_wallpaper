@@ -10,13 +10,12 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
   s.executables = 'reddit_wallpaper'
 
-  s.files = Dir["{lib,bin}/**/*"] +
-    %w{README.md LICENSE}
-  # TODO Write me some specs please
-  # s.test_files = Dir["spec/**/*"]
+  s.required_ruby_version = '>= 1.9.3'
+  s.files                 = Dir["{lib,bin}/**/*"] + %w{README.md LICENSE}
+  s.test_files            = Dir["spec/**/*"]
 
   s.add_dependency "ruby_reddit_api",       "~> 0.2"
   s.add_dependency "open_uri_redirections", "~> 0.1"
 
-  s.required_ruby_version = '>= 1.9.3'
+  s.add_development_dependency "minitest", "~> 5.3"
 end
