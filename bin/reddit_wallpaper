@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative '../lib/reddit_wallpaper'
+
+options = {
+  subreddit:   'earthporn',
+  destination: File.join(Dir.home, "background.jpg")
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: reddit_wallpaper [options]"
+  opts.on("-d", "--destination [PATH]", String,
+    "Wallpaper destination file [#{options[:destination]}]") do |destination|
+    options[:destination] = destination
+  end
+
+  opts.on("-r", "--subreddit [NAME]", String,
+    "Subreddit to grab images from [#{options[:subreddit]}]") do |subreddit|
+    options[:subreddit] = subreddit
+  end
+end.parse!
+
+downloader = RedditWallpaper.new(options[:subreddit], options[:destination])
+
+loop do
+  downloader.download_new_image
+  puts "#{downloader.downloaded.last} downloaded"
+
+  # Manually reload the background image on OS X
+  # This requires us to set the image to something else, and then back to the
+  # downloaded image
+  if RUBY_PLATFORM[/darwin/]
+    script = ->(file){
+      `osascript -e 'tell application "Finder" to set desktop picture to\
+      "#{file}" as POSIX file'`
+    }
+    script["/Library/Desktop\ Pictures/Solid\ Colors/Solid\ Aqua\ Blue.png"]
+    script[options[:destination]]
+  end
+  sleep 5*60 # wait for 5 minutes
+end
